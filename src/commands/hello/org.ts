@@ -3,9 +3,12 @@ import { core, flags, SfdxCommand } from '@salesforce/command';
 import { Messages, SfdxError } from '@salesforce/core';
 import { AnyJson } from '@salesforce/ts-types';
 import { ApexTestRunCommand } from 'salesforce-alm/dist/commands/force/apex/test/run';
+import { CoverageItem } from '../../models/coverageItem';
+import { Report } from '../../models/report';
+import { Summary } from '../../models/summary';
 // import * as junit from 'junit-viewer';
 // Initialize Messages with the current plugin directory
-const fs = require('fs')
+const fs = require('fs');
 Messages.importMessagesDirectory(__dirname);
 
 // Load the specific messages for this file. Messages from @salesforce/command, @salesforce/core,
@@ -14,56 +17,59 @@ const messages = Messages.loadMessages('sfdx-test-runner', 'org');
 
 export default class Org extends ApexTestRunCommand {
 
-  // public static description = messages.getMessage('commandDescription');
-
-  // public static examples = [
-  // `$ sfdx hello:org --targetusername myOrg@example.com --targetdevhubusername devhub@org.com
-  // Hello world! This is org: MyOrg and I will be around until Tue Mar 20 2018!
-  // My hub org id is: 00Dxx000000001234
-  // `,
-  // `$ sfdx hello:org --name myname --targetusername myOrg@example.com
-  // Hello myname! This is org: MyOrg and I will be around until Tue Mar 20 2018!
-  // `
-  // ];
-
   public static args = [{name: 'file'}];
 
   public async run(): Promise<unknown> {
     const testRunResult = await super.run();
+    const html = this.parseToHtml(testRunResult as Report);
 
-    console.log('testRunResult >>', testRunResult);
-    const html = this.parseToHtml(testRunResult);
-
-    fs.writeFile('report.html', html, (err) => {
+    fs.writeFile('report.html', html, err => {
       if (err) {
           return console.error(err);
       }
-        console.log('The file was saved!');
+      console.log('The file was saved!');
     });
 
     return testRunResult;
   }
 
   public parseToHtml(json) {
-    return `
-      <div style="max-width: 1024px; margin: 0 auto">
-      ${json.result.tests.map.map(this.testTemplate).join("")}
-      </div>
-    `;
+    const testsArray: CoverageItem[] = json.coverage && json.coverage.coverage;
+    const summary: Summary = json.summary;
+    if (testsArray && summary) {
+      return `
+        <div style="max-width: 1024px; margin: 0 auto">
+          <h1 style="text-align: center">Code Coverage for Apex code</h1>
+          <div><h4>Pass rate:</h4><p>${summary.passRate}</p></div>
+        </div>
+        <div style="max-width: 1024px; border: 1px solid #222; margin: 0 auto">
+        ${testsArray.map(this.testTemplate).join('')}
+        </div>
+      `;
+      } else {
+        return '<h1>Something went wrong</h1>';
+      }
   }
 
-  public testTemplate(test) {
-    const bgc = test.Outcome.toLowerCase() === 'pass' ? ('background-color: #7dde79') : ('background-color: #e87966');
-    const row = `display: flex; justify-content: space-between; padding: 10px; ${bgc}`;
-    const elem =' width: 20%; padding: 6px 10px; ';
+  public testTemplate(test: CoverageItem) {
+    const bgc =  Math.round(test.coveredPercent) >= 75 ? '#b6ecb4' : '#fbbaba';
+    const row = `display: flex; justify-content: space-between; background-color: ${bgc};`;
+    const elem = 'padding: 10px; border: 1px solid #222;';
+
+    const bgBar = Math.round(test.coveredPercent) >= 75 ? '#409e3d' : '#dc4247';
+    const bar = `background-color: ${bgBar}; height: 14px;`;
     return `
-      <div style='${row}'>
-        <div style='${elem}'>${test.ApexClass.attributes.type}</div>
-        <div style='${elem}'>${test.ApexClass.Name}</div>
-        <div style='${elem}'>${test.Outcome}</div>
-        <div style='${elem}'>Numbers</div>
-        <div style='${elem}'>Numbers</div>
-      </div>
-    `;
+        <div style='${row}'>
+          <div style='${elem}width: 30%'>${test.id}</div>
+          <div style='${elem}width: 30%'>${test.name}</div>
+          <div style='${elem}width: 20%'>
+            <div style='width: 100%; background-color: #fff; border: 2px solid ${bgBar};'>
+              <div style='${bar}width: ${Math.round(test.coveredPercent)}%'></div>
+            </div>
+          </div>
+          <div style='${elem}width: 10%;text-align:right;'>${test.coveredPercent.toFixed(2)}%</div>
+          <div style='${elem}width: 10%;text-align:right;'>${test.totalCovered} / ${test.totalLines}</div>
+        </div>
+      `;
   }
 }
