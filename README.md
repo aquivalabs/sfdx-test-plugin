@@ -22,7 +22,7 @@ $ npm install -g sfdx-test-runner
 $ sfdx COMMAND
 running command...
 $ sfdx (-v|--version|version)
-sfdx-test-runner/0.0.0 darwin-x64 node-v12.7.0
+sfdx-test-runner/0.1.0 darwin-x64 node-v12.7.0
 $ sfdx --help [COMMAND]
 USAGE
   $ sfdx COMMAND
@@ -82,23 +82,9 @@ OPTIONS
 DESCRIPTION
   To run specific test classes, specify class names or suite names, or set a --testlevel value.
 
-     To run specific test methods, use --tests.
-
-     Generates html report.
-
-  By default, runs all Apex tests in the org’s namespace.
-
-  To run specific test classes, specify class names or suite names, or set a --testlevel value.
-
   To run specific test methods, use --tests.
 
-  Examples:
-      $ sfdx force:apex:test:run
-      $ sfdx force:apex:test:run -n MyClassTest,MyOtherClassTest -r human
-      $ sfdx force:apex:test:run -s MySuite,MyOtherSuite -c --json
-      $ sfdx force:apex:test:run -t 
-  MyClassTest.testCoolFeature,MyClassTest.testAwesomeFeature,AnotherClassTest,namespace.TheirClassTest.testThis -r human
-      $ sfdx force:apex:test:run -l RunLocalTests -d <path to outputdir> -u me@my.org
+  Generates html report.
 
 EXAMPLES
   $ sfdx testdx:force:apex:run -n MyClassTest,MyOtherClassTest
@@ -108,7 +94,7 @@ EXAMPLES
   $ sfdx testdx:force:apex:run -l RunLocalTests -u me@my.org
 ```
 
-_See code: [src/commands/testdx/force/apex/run.ts](https://github.com/nchursin/sfdx-test-runner/blob/v0.0.0/src/commands/testdx/force/apex/run.ts)_
+_See code: [src/commands/testdx/force/apex/run.ts](https://github.com/nchursin/sfdx-test-runner/blob/v0.1.0/src/commands/testdx/force/apex/run.ts)_
 <!-- commandsstop -->
 <!-- debugging-your-plugin -->
 # Debugging your plugin
