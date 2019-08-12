@@ -12,9 +12,6 @@ Generates beautiful reports from SF test runs
 [![Downloads/week](https://img.shields.io/npm/dw/sfdx-test-runner.svg)](https://npmjs.org/package/testdx)
 [![License](https://img.shields.io/npm/l/sfdx-test-runner.svg)](https://github.com/nchursin/sfdx-test-runner/blob/master/package.json) -->
 
-<!-- toc -->
-* [Debugging your plugin](#debugging-your-plugin)
-<!-- tocstop -->
 <!-- install -->
 <!-- usage -->
 ```sh-session
