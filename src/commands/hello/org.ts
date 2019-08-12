@@ -4,6 +4,7 @@ import { ApexTestRunCommand } from 'salesforce-alm/dist/commands/force/apex/test
 import { CoverageItem } from '../../models/coverageItem';
 import { Report } from '../../models/report';
 import { Summary } from '../../models/summary';
+import * as path from "path";
 
 
 // Initialize Messages with the current plugin directory
@@ -14,6 +15,8 @@ Messages.importMessagesDirectory(__dirname);
 // Load the specific messages for this file. Messages from @salesforce/command, @salesforce/core,
 // or any library that is using the messages framework can also be loaded this way.
 const messages = Messages.loadMessages('sfdx-test-runner', 'org');
+
+const REPORT_NAME = 'report.html';
 
 const flagsConfig = ApexTestRunCommand.flagsConfig;
 flagsConfig.codecoverage = undefined;
@@ -43,18 +46,28 @@ export default class Org extends ApexTestRunCommand {
   public async run(): Promise<unknown> {
     const coverage = this.flags['codecoverage'];
     const resultformat = this.flags['resultformat'];
+    const outputdir = this.flags['outputdir'];
+    let reportPath = path.isAbsolute(outputdir) ? outputdir : path.resolve(outputdir);
+
+    // fill in defaults for ApexTestRunCommand to run properly
     if (!coverage) {
       this.flags['codecoverage'] = true;
     }
     if (!resultformat) {
       this.flags['resultformat'] = 'json';
     }
+    if (outputdir) {
+      this.flags['outputdir'] = undefined;
+      reportPath = `${path.resolve(outputdir)}/${REPORT_NAME}`;
+    } else {
+      reportPath = REPORT_NAME;
+    }
 
     const testRunResult = await super.run();
 
     const html = parseToHtml(testRunResult as Report);
 
-    fs.writeFile('report.html', html, err => {
+    fs.writeFile(reportPath, html, err => {
       if (err) {
           return console.error(err);
       }
