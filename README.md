@@ -1,4 +1,4 @@
-sfdx-test-runner
+TestDX
 ================
 
 Generates beautiful reports from SF test runs
