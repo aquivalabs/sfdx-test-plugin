@@ -3,10 +3,11 @@ import { Summary } from '../models/summary';
 
 export const parseToHtml = json => {
   const testsArray: CoverageItem[] = json.coverage && json.coverage.coverage;
+  const sortedArray: CoverageItem[] = testsArray.sort((a, b) => (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0));
   const summary: Summary = json.summary;
   const row = 'display: flex; justify-content: space-between; background-color: #fff;';
   const elem = 'padding: 10px; border: 1px solid #222;';
-  if (testsArray && summary) {
+  if (sortedArray && summary) {
     return `
       <div style="max-width: 1024px; margin: 0 auto">
         <h1 style="text-align: center">Code Coverage for Apex code</h1>
@@ -19,7 +20,7 @@ export const parseToHtml = json => {
         <div style='${elem}width: 20%;text-align:right;'>Covered %</div>
         <div style='${elem}width: 20%;text-align:right;'>Lines: Covered/ Total</div>
       </div>
-      ${testsArray.map(testTemplate).join('')}
+      ${sortedArray.map(testTemplate).join('')}
       </div>
     `;
     } else {
