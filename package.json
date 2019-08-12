@@ -1,5 +1,5 @@
 {
-  "name": "sfdx-test-runner",
+  "name": "testdx",
   "description": "Generates beautiful reports from SF test runs",
   "version": "0.1.0",
   "author": "Nikita Chursin @nchursin",
