@@ -39,7 +39,7 @@ export default class Org extends ApexTestRunCommand {
     `$ sfdx testdx:force:apex:run -s MySuite,MyOtherSuite`,
     `$ sfdx testdx:force:apex:run -t MyClassTest.testCoolFeature,MyClassTest.testAwesomeFeature,AnotherClassTest,namespace.TheirClassTest.testThis`,
     `$ sfdx testdx:force:apex:run -l RunLocalTests -u me@my.org`,
-    ];
+  ];
 
   public static args = [{name: 'file'}];
 
