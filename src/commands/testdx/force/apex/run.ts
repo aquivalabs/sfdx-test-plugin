@@ -1,18 +1,18 @@
 import { FlagsConfig } from '@salesforce/command';
 import { Messages } from '@salesforce/core';
 import { ApexTestRunCommand } from 'salesforce-alm/dist/commands/force/apex/test/run';
-import { Report } from '../../models/report';
+import { Report } from '../../../../models/report';
 import * as path from "path";
 
 
 // Initialize Messages with the current plugin directory
 import fs = require('fs');
-import { parseToHtml } from '../../templates/templates';
+import { parseToHtml } from '../../../../templates/templates';
 Messages.importMessagesDirectory(__dirname);
 
 // Load the specific messages for this file. Messages from @salesforce/command, @salesforce/core,
 // or any library that is using the messages framework can also be loaded this way.
-const messages = Messages.loadMessages('sfdx-test-runner', 'org');
+// const messages = Messages.loadMessages('sfdx-test-runner', 'org');
 
 const REPORT_NAME = 'report.html';
 
@@ -20,7 +20,7 @@ const flagsConfig = ApexTestRunCommand.flagsConfig;
 flagsConfig.codecoverage = undefined;
 flagsConfig.resultformat = undefined;
 
-export default class Org extends ApexTestRunCommand {
+export default class TestDXApexTestRunCommand extends ApexTestRunCommand {
 
   public static flagsConfig: FlagsConfig = flagsConfig;
 
