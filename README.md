@@ -22,7 +22,7 @@ $ npm install -g sfdx-test-runner
 $ sfdx COMMAND
 running command...
 $ sfdx (-v|--version|version)
-sfdx-test-runner/0.0.0 darwin-x64 node-v12.7.0
+sfdx-test-runner/0.1.0 darwin-x64 node-v12.7.0
 $ sfdx --help [COMMAND]
 USAGE
   $ sfdx COMMAND
@@ -108,7 +108,7 @@ EXAMPLES
   $ sfdx testdx:force:apex:run -l RunLocalTests -u me@my.org
 ```
 
-_See code: [src/commands/testdx/force/apex/run.ts](https://github.com/nchursin/sfdx-test-runner/blob/v0.0.0/src/commands/testdx/force/apex/run.ts)_
+_See code: [src/commands/testdx/force/apex/run.ts](https://github.com/nchursin/sfdx-test-runner/blob/v0.1.0/src/commands/testdx/force/apex/run.ts)_
 <!-- commandsstop -->
 <!-- debugging-your-plugin -->
 # Debugging your plugin
