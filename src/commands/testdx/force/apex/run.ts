@@ -45,7 +45,7 @@ export default class TestDXApexTestRunCommand extends ApexTestRunCommand {
     const coverage = this.flags['codecoverage'];
     const resultformat = this.flags['resultformat'];
     const outputdir = this.flags['outputdir'];
-    let reportPath = path.isAbsolute(outputdir) ? outputdir : path.resolve(outputdir);
+    let reportPath;
 
     // fill in defaults for ApexTestRunCommand to run properly
     if (!coverage) {
@@ -56,6 +56,7 @@ export default class TestDXApexTestRunCommand extends ApexTestRunCommand {
     }
     if (outputdir) {
       this.flags['outputdir'] = undefined;
+      reportPath = path.isAbsolute(outputdir) ? outputdir : path.resolve(outputdir);
       reportPath = `${path.resolve(outputdir)}/${REPORT_NAME}`;
     } else {
       reportPath = REPORT_NAME;

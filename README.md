@@ -82,9 +82,23 @@ OPTIONS
 DESCRIPTION
   To run specific test classes, specify class names or suite names, or set a --testlevel value.
 
+     To run specific test methods, use --tests.
+
+     Generates html report.
+
+  By default, runs all Apex tests in the org’s namespace.
+
+  To run specific test classes, specify class names or suite names, or set a --testlevel value.
+
   To run specific test methods, use --tests.
 
-  Generates html report.
+  Examples:
+      $ sfdx force:apex:test:run
+      $ sfdx force:apex:test:run -n MyClassTest,MyOtherClassTest -r human
+      $ sfdx force:apex:test:run -s MySuite,MyOtherSuite -c --json
+      $ sfdx force:apex:test:run -t 
+  MyClassTest.testCoolFeature,MyClassTest.testAwesomeFeature,AnotherClassTest,namespace.TheirClassTest.testThis -r human
+      $ sfdx force:apex:test:run -l RunLocalTests -d <path to outputdir> -u me@my.org
 
 EXAMPLES
   $ sfdx testdx:force:apex:run -n MyClassTest,MyOtherClassTest
