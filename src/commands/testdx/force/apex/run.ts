@@ -1,9 +1,8 @@
 import { FlagsConfig } from '@salesforce/command';
 import { Messages } from '@salesforce/core';
+import * as path from 'path';
 import { ApexTestRunCommand } from 'salesforce-alm/dist/commands/force/apex/test/run';
 import { Report } from '../../../../models/report';
-import * as path from "path";
-
 
 // Initialize Messages with the current plugin directory
 import fs = require('fs');
@@ -33,10 +32,10 @@ export default class TestDXApexTestRunCommand extends ApexTestRunCommand {
   Generates html report.`;
 
   public static examples = [
-    `$ sfdx testdx:force:apex:run -n MyClassTest,MyOtherClassTest`,
-    `$ sfdx testdx:force:apex:run -s MySuite,MyOtherSuite`,
-    `$ sfdx testdx:force:apex:run -t MyClassTest.testCoolFeature,MyClassTest.testAwesomeFeature,AnotherClassTest,namespace.TheirClassTest.testThis`,
-    `$ sfdx testdx:force:apex:run -l RunLocalTests -u me@my.org`,
+    '$ sfdx testdx:force:apex:run -n MyClassTest,MyOtherClassTest',
+    '$ sfdx testdx:force:apex:run -s MySuite,MyOtherSuite',
+    '$ sfdx testdx:force:apex:run -t MyClassTest.testCoolFeature,MyClassTest.testAwesomeFeature,AnotherClassTest,namespace.TheirClassTest.testThis',
+    '$ sfdx testdx:force:apex:run -l RunLocalTests -u me@my.org'
   ];
 
   public static args = [{name: 'file'}];
