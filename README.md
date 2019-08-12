@@ -3,7 +3,7 @@ sfdx-test-runner
 
 Generates beautiful reports from SF test runs
 
-[![Version](https://img.shields.io/npm/v/sfdx-test-runner.svg)](https://npmjs.org/package/testdx)
+[![Version](https://img.shields.io/npm/v/testdx.svg)](https://npmjs.org/package/testdx)
 <!-- [![CircleCI](https://circleci.com/gh/nchursin/sfdx-test-runner/tree/master.svg?style=shield)](https://circleci.com/gh/nchursin/sfdx-test-runner/tree/master)
 [![Appveyor CI](https://ci.appveyor.com/api/projects/status/github/nchursin/sfdx-test-runner?branch=master&svg=true)](https://ci.appveyor.com/project/heroku/sfdx-test-runner/branch/master)
 [![Codecov](https://codecov.io/gh/nchursin/sfdx-test-runner/branch/master/graph/badge.svg)](https://codecov.io/gh/nchursin/sfdx-test-runner)
