@@ -3,13 +3,13 @@ sfdx-test-runner
 
 Generates beautiful reports from SF test runs
 
-[![Version](https://img.shields.io/npm/v/sfdx-test-runner.svg)](https://npmjs.org/package/sfdx-test-runner)
+[![Version](https://img.shields.io/npm/v/sfdx-test-runner.svg)](https://npmjs.org/package/testdx)
 [![CircleCI](https://circleci.com/gh/nchursin/sfdx-test-runner/tree/master.svg?style=shield)](https://circleci.com/gh/nchursin/sfdx-test-runner/tree/master)
 [![Appveyor CI](https://ci.appveyor.com/api/projects/status/github/nchursin/sfdx-test-runner?branch=master&svg=true)](https://ci.appveyor.com/project/heroku/sfdx-test-runner/branch/master)
 [![Codecov](https://codecov.io/gh/nchursin/sfdx-test-runner/branch/master/graph/badge.svg)](https://codecov.io/gh/nchursin/sfdx-test-runner)
 [![Greenkeeper](https://badges.greenkeeper.io/nchursin/sfdx-test-runner.svg)](https://greenkeeper.io/)
 [![Known Vulnerabilities](https://snyk.io/test/github/nchursin/sfdx-test-runner/badge.svg)](https://snyk.io/test/github/nchursin/sfdx-test-runner)
-[![Downloads/week](https://img.shields.io/npm/dw/sfdx-test-runner.svg)](https://npmjs.org/package/sfdx-test-runner)
+[![Downloads/week](https://img.shields.io/npm/dw/sfdx-test-runner.svg)](https://npmjs.org/package/testdx)
 [![License](https://img.shields.io/npm/l/sfdx-test-runner.svg)](https://github.com/nchursin/sfdx-test-runner/blob/master/package.json)
 
 <!-- toc -->
