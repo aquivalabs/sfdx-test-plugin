@@ -6,7 +6,7 @@ import { ApexTestRunCommand } from 'salesforce-alm/dist/commands/force/apex/test
 import { CoverageItem } from '../../models/coverageItem';
 import { Report } from '../../models/report';
 import { Summary } from '../../models/summary';
-// import * as junit from 'junit-viewer';
+
 // Initialize Messages with the current plugin directory
 const fs = require('fs');
 Messages.importMessagesDirectory(__dirname);
@@ -20,7 +20,17 @@ export default class Org extends ApexTestRunCommand {
   public static args = [{name: 'file'}];
 
   public async run(): Promise<unknown> {
+    const coverage = this.flags['codecoverage'];
+    const resultformat = this.flags['resultformat'];
+    if (!coverage) {
+      this.flags['codecoverage'] = true;
+    }
+    if (!resultformat) {
+      this.flags['resultformat'] = 'json';
+    }
+
     const testRunResult = await super.run();
+
     const html = this.parseToHtml(testRunResult as Report);
 
     fs.writeFile('report.html', html, err => {
