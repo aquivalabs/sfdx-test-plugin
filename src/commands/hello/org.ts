@@ -1,9 +1,7 @@
 import { FlagsConfig } from '@salesforce/command';
 import { Messages } from '@salesforce/core';
 import { ApexTestRunCommand } from 'salesforce-alm/dist/commands/force/apex/test/run';
-import { CoverageItem } from '../../models/coverageItem';
 import { Report } from '../../models/report';
-import { Summary } from '../../models/summary';
 import * as path from "path";
 
 
