@@ -1,5 +1,5 @@
 import { IConfig, LoadOptions } from '@oclif/config';
-import { core, flags, SfdxCommand } from '@salesforce/command';
+import { core, flags, SfdxCommand, FlagsConfig } from '@salesforce/command';
 import { Messages, SfdxError } from '@salesforce/core';
 import { AnyJson } from '@salesforce/ts-types';
 import { ApexTestRunCommand } from 'salesforce-alm/dist/commands/force/apex/test/run';
@@ -17,7 +17,13 @@ Messages.importMessagesDirectory(__dirname);
 // or any library that is using the messages framework can also be loaded this way.
 const messages = Messages.loadMessages('sfdx-test-runner', 'org');
 
+const flagsConfig = ApexTestRunCommand.flagsConfig;
+flagsConfig.codecoverage = undefined;
+flagsConfig.resultformat = undefined;
+
 export default class Org extends ApexTestRunCommand {
+
+  public static flagsConfig: FlagsConfig = flagsConfig;
 
   public static args = [{name: 'file'}];
 
