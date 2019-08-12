@@ -70,7 +70,7 @@ export default class TestDXApexTestRunCommand extends ApexTestRunCommand {
       if (err) {
           return console.error(err);
       }
-      console.log('The file was saved!');
+      console.log(`The report is generated: ${reportPath}`);
     });
 
     return testRunResult;
