@@ -1,11 +1,13 @@
 import { CoverageItem } from '../models/coverageItem';
 import { Summary } from '../models/summary';
 import { curry } from "ramda";
+import { Coverage } from '../models/coverage';
 
 export const parseToHtml = (json, coverageThreshold = 75) => {
   const testsArray: CoverageItem[] = json.coverage && json.coverage.coverage;
   const sortedArray: CoverageItem[] = testsArray.sort((a, b) => (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0));
   const summary: Summary = json.summary;
+  const coverage = json.coverage as Coverage;
   const row = 'display: flex; justify-content: space-between; background-color: #fff;';
   const elem = 'padding: 10px; border: 1px solid #222;';
   const template = testTemplate(coverageThreshold);
@@ -13,7 +15,9 @@ export const parseToHtml = (json, coverageThreshold = 75) => {
     return `
       <div style="max-width: 1024px; margin: 0 auto">
         <h1 style="text-align: center">Code Coverage for Apex code</h1>
-        <div><h4>Test ran:</h4><p>${summary.testsRan}</p></div>
+        <div><h4>Test ran: ${summary.testsRan}</h4></div>
+        <div><h4>Org Wide Coverage: ${coverage.summary.orgWideCoverage}</h4></div>
+        <div><h4>Total Lines Covered: ${coverage.summary.coveredLines}/${coverage.summary.totalLines}</h4></div>
       </div>
       <div style="max-width: 1024px; border: 1px solid #222; margin: 0 auto">
       <div style='${row}'>
