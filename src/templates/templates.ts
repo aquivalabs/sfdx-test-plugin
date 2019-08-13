@@ -13,7 +13,7 @@ export const parseToHtml = (json, coverageThreshold = 75) => {
     return `
       <div style="max-width: 1024px; margin: 0 auto">
         <h1 style="text-align: center">Code Coverage for Apex code</h1>
-        <div><h4>TestRunCoverage:</h4><p>${summary.testsRan}%</p></div>
+        <div><h4>Test ran:</h4><p>${summary.testsRan}</p></div>
       </div>
       <div style="max-width: 1024px; border: 1px solid #222; margin: 0 auto">
       <div style='${row}'>
