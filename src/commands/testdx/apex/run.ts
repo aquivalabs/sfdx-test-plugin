@@ -1,11 +1,11 @@
 import { FlagsConfig, flags } from '@salesforce/command';
 import * as path from 'path';
 import { ApexTestRunCommand } from 'salesforce-alm/dist/commands/force/apex/test/run';
-import { Report } from '../../../../models/report';
+import { Report } from '../../../models/report';
 
 // Initialize Messages with the current plugin directory
 import fs = require('fs');
-import { parseToHtml } from '../../../../templates/templates';
+import { parseToHtml } from '../../../templates/templates';
 
 // Load the specific messages for this file. Messages from @salesforce/command, @salesforce/core,
 // or any library that is using the messages framework can also be loaded this way.

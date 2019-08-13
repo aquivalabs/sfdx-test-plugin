@@ -24,11 +24,11 @@ USAGE
 ```
 <!-- usagestop -->
 <!-- commands -->
-* `testdx:force:apex:run` - generates an HTML report from Apex test run
+* `testdx:apex:run` - generates an HTML report from Apex test run
 
 ```
 USAGE
-  $ sfdx testdx:force:apex:run [-n <array> | -s <array> | -t <array>] [-d <directory>] [-l 
+  $ sfdx testdx:apex:run [-n <array> | -s <array> | -t <array>] [-d <directory>] [-l 
   RunLocalTests|RunAllTestsInOrg|RunSpecifiedTests] [-w <minutes>] [-y] [-r human|tap|junit|json] [-u <string>] 
   [--apiversion <string>] [--verbose] [--json] [--loglevel 
   trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL]
@@ -77,11 +77,11 @@ DESCRIPTION
   Generates html report.
 
 EXAMPLES
-  $ sfdx testdx:force:apex:run -n MyClassTest,MyOtherClassTest
-  $ sfdx testdx:force:apex:run -s MySuite,MyOtherSuite
-  $ sfdx testdx:force:apex:run -t 
+  $ sfdx testdx:apex:run -n MyClassTest,MyOtherClassTest
+  $ sfdx testdx:apex:run -s MySuite,MyOtherSuite
+  $ sfdx testdx:apex:run -t 
   MyClassTest.testCoolFeature,MyClassTest.testAwesomeFeature,AnotherClassTest,namespace.TheirClassTest.testThis
-  $ sfdx testdx:force:apex:run -l RunLocalTests -u me@my.org
+  $ sfdx testdx:apex:run -l RunLocalTests -u me@my.org
 ```
 
 _See code: [src/commands/testdx/force/apex/run.ts](https://github.com/nchursin/sfdx-test-runner/blob/v0.1.0/src/commands/testdx/force/apex/run.ts)_
