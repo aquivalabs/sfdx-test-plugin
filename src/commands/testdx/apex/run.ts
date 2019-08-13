@@ -1,4 +1,4 @@
-import { FlagsConfig, flags } from '@salesforce/command';
+import { flags, FlagsConfig } from '@salesforce/command';
 import * as path from 'path';
 import { ApexTestRunCommand } from 'salesforce-alm/dist/commands/force/apex/test/run';
 import { Report } from '../../../models/report';
@@ -40,10 +40,35 @@ export default class TestDXApexTestRunCommand extends ApexTestRunCommand {
   public static args = [{name: 'file'}];
 
   public async run(): Promise<unknown> {
-    const coverage = this.flags['codecoverage'];
-    const resultformat = this.flags['resultformat'];
+    const reportPath = this.getReportPath();
+
+    this.normalizeFlags();
+
+    const testRunResult = await super.run();
+
+    const html = parseToHtml(testRunResult as Report, this.flags['coverage']);
+
+    this.saveToFile(reportPath, html);
+
+    return testRunResult;
+  }
+
+  private getReportPath() {
     const outputdir = this.flags['outputdir'];
     let reportPath;
+    if (outputdir) {
+      this.flags['outputdir'] = undefined;
+      reportPath = path.isAbsolute(outputdir) ? outputdir : path.resolve(outputdir);
+      reportPath = `${path.resolve(outputdir)}/${REPORT_NAME}`;
+    } else {
+      reportPath = REPORT_NAME;
+    }
+    return reportPath;
+  }
+
+  private normalizeFlags() {
+    const coverage = this.flags['codecoverage'];
+    const resultformat = this.flags['resultformat'];
 
     // fill in defaults for ApexTestRunCommand to run properly
     if (!coverage) {
@@ -52,25 +77,14 @@ export default class TestDXApexTestRunCommand extends ApexTestRunCommand {
     if (!resultformat) {
       this.flags['resultformat'] = 'json';
     }
-    if (outputdir) {
-      this.flags['outputdir'] = undefined;
-      reportPath = path.isAbsolute(outputdir) ? outputdir : path.resolve(outputdir);
-      reportPath = `${path.resolve(outputdir)}/${REPORT_NAME}`;
-    } else {
-      reportPath = REPORT_NAME;
-    }
+  }
 
-    const testRunResult = await super.run();
-
-    const html = parseToHtml(testRunResult as Report, this.flags['coverage']);
-
-    fs.writeFile(reportPath, html, err => {
+  private saveToFile(path, html) {
+    fs.writeFile(path, html, err => {
       if (err) {
           return console.error(err);
       }
-      console.log(`The report is generated: ${reportPath}`);
+      console.log(`The report is generated: ${path}`);
     });
-
-    return testRunResult;
   }
 }

@@ -1,7 +1,7 @@
-import { CoverageItem } from '../models/coverageItem';
-import { Summary } from '../models/summary';
 import { curry } from "ramda";
 import { Coverage } from '../models/coverage';
+import { CoverageItem } from '../models/coverageItem';
+import { Summary } from '../models/summary';
 
 export const parseToHtml = (json, coverageThreshold = 75) => {
   const testsArray: CoverageItem[] = json.coverage && json.coverage.coverage;
