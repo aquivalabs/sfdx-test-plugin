@@ -1,5 +1,4 @@
-import { FlagsConfig } from '@salesforce/command';
-import { Messages } from '@salesforce/core';
+import { FlagsConfig, flags } from '@salesforce/command';
 import * as path from 'path';
 import { ApexTestRunCommand } from 'salesforce-alm/dist/commands/force/apex/test/run';
 import { Report } from '../../../../models/report';
@@ -7,17 +6,17 @@ import { Report } from '../../../../models/report';
 // Initialize Messages with the current plugin directory
 import fs = require('fs');
 import { parseToHtml } from '../../../../templates/templates';
-Messages.importMessagesDirectory(__dirname);
 
 // Load the specific messages for this file. Messages from @salesforce/command, @salesforce/core,
 // or any library that is using the messages framework can also be loaded this way.
-// const messages = Messages.loadMessages('sfdx-test-runner', 'org');
 
 const REPORT_NAME = 'report.html';
 
 const flagsConfig = ApexTestRunCommand.flagsConfig;
 flagsConfig.codecoverage = undefined;
 flagsConfig.resultformat = undefined;
+
+flagsConfig.coverage = flags.number({char: 'C', description: 'Code coverage threshold. The report will paint a class red in case coverage is less then this value. Defaults to 75'});
 
 export default class TestDXApexTestRunCommand extends ApexTestRunCommand {
 
@@ -63,7 +62,7 @@ export default class TestDXApexTestRunCommand extends ApexTestRunCommand {
 
     const testRunResult = await super.run();
 
-    const html = parseToHtml(testRunResult as Report);
+    const html = parseToHtml(testRunResult as Report, this.flags['coverage']);
 
     fs.writeFile(reportPath, html, err => {
       if (err) {

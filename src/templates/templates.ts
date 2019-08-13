@@ -1,12 +1,14 @@
 import { CoverageItem } from '../models/coverageItem';
 import { Summary } from '../models/summary';
+import { curry } from "ramda";
 
-export const parseToHtml = json => {
+export const parseToHtml = (json, coverageThreshold = 75) => {
   const testsArray: CoverageItem[] = json.coverage && json.coverage.coverage;
   const sortedArray: CoverageItem[] = testsArray.sort((a, b) => (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0));
   const summary: Summary = json.summary;
   const row = 'display: flex; justify-content: space-between; background-color: #fff;';
   const elem = 'padding: 10px; border: 1px solid #222;';
+  const template = testTemplate(coverageThreshold);
   if (sortedArray && summary) {
     return `
       <div style="max-width: 1024px; margin: 0 auto">
@@ -20,7 +22,7 @@ export const parseToHtml = json => {
         <div style='${elem}width: 20%;text-align:right;'>Covered %</div>
         <div style='${elem}width: 20%;text-align:right;'>Lines: Covered/ Total</div>
       </div>
-      ${sortedArray.map(testTemplate).join('')}
+      ${sortedArray.map(template).join('')}
       </div>
     `;
     } else {
@@ -28,12 +30,12 @@ export const parseToHtml = json => {
     }
 };
 
-const testTemplate = (test: CoverageItem) => {
-  const bgc =  Math.round(test.coveredPercent) >= 75 ? '#b6ecb4' : '#fbbaba';
+const testTemplate = curry((coverageThreshold, test: CoverageItem) => {
+  const bgc =  Math.round(test.coveredPercent) >= coverageThreshold ? '#b6ecb4' : '#fbbaba';
   const row = `display: flex; justify-content: space-between; background-color: ${bgc};`;
   const elem = 'padding: 10px; border: 1px solid #222;';
 
-  const bgBar = Math.round(test.coveredPercent) >= 75 ? '#409e3d' : '#dc4247';
+  const bgBar = Math.round(test.coveredPercent) >= coverageThreshold ? '#409e3d' : '#dc4247';
   const bar = `background-color: ${bgBar}; height: 14px;`;
   return `
       <div style='${row}'>
@@ -47,4 +49,4 @@ const testTemplate = (test: CoverageItem) => {
         <div style='${elem}width: 20%;text-align:right;'>${test.totalCovered} / ${test.totalLines}</div>
       </div>
     `;
-}
+})
