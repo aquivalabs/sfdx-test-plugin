@@ -5,8 +5,8 @@ import { Report } from '../../../models/report';
 
 // Initialize Messages with the current plugin directory
 import fs = require('fs');
+import { __, clone, filter, includes, map, replace } from 'ramda';
 import { parseToHtml } from '../../../templates/templates';
-import { replace, map, clone, filter, includes, __ } from 'ramda';
 import { runApexCode } from '../../../utils/apex';
 
 // Load the specific messages for this file. Messages from @salesforce/command, @salesforce/core,
@@ -41,22 +41,25 @@ export default class TestDXApexTestRunCommand extends ApexTestRunCommand {
 
   public static args = [{name: 'file'}];
 
-  public isToGenerateHtmlReport = false;
+  private isToGenerateHtmlReport = false;
 
   public async run(): Promise<unknown> {
-    const reportPath = this.getReportPath();
-
     await this.normalizeFlags();
 
     const testRunResult = await super.run();
 
     if (this.isToGenerateHtmlReport) {
-      const html = parseToHtml(testRunResult as Report, this.flags['coverage']);
-      this.saveToFile(reportPath, html);
-      console.log(`The report is generated: ${reportPath}`);
+      this.generateHtmlReport(testRunResult as Report);
     }
 
     return testRunResult;
+  }
+
+  private generateHtmlReport(testRunResult: Report) {
+    const reportPath = this.getReportPath();
+    const html = parseToHtml(testRunResult, this.flags['coverage']);
+    this.saveToFile(reportPath, html);
+    console.log(`The report is generated: ${reportPath}`);
   }
 
   private getReportPath() {
