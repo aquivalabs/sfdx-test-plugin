@@ -1,11 +1,14 @@
 import { flags, FlagsConfig } from '@salesforce/command';
 import * as path from 'path';
 import { ApexTestRunCommand } from 'salesforce-alm/dist/commands/force/apex/test/run';
+import { ApexExecuteCommand } from 'salesforce-alm/dist/commands/force/apex/execute';
 import { Report } from '../../../models/report';
 
 // Initialize Messages with the current plugin directory
 import fs = require('fs');
 import { parseToHtml } from '../../../templates/templates';
+import { replace, map, clone, filter, includes, __ } from 'ramda';
+import { runApexCode } from '../../../utils/apex';
 
 // Load the specific messages for this file. Messages from @salesforce/command, @salesforce/core,
 // or any library that is using the messages framework can also be loaded this way.
@@ -18,6 +21,7 @@ ApexTestRunCommand.resultFormatOptions.options.push('html');
 
 flagsConfig.coverage = flags.number({char: 'C', description: 'Code coverage threshold. The report will paint a class red in HTML report in case coverage is less then this value. Defaults to 75'});
 flagsConfig.html = flags.boolean({description: 'Generates HTML report. Doesn\'t override --resultformat and --json flags, but works in addition'});
+flagsConfig.exclude = flags.array({char: 'x', description: 'Specify tests to EXCLUDE from test run. This is useful for granular test runs and risk group management'});
 
 export default class TestDXApexTestRunCommand extends ApexTestRunCommand {
 
@@ -43,13 +47,14 @@ export default class TestDXApexTestRunCommand extends ApexTestRunCommand {
   public async run(): Promise<unknown> {
     const reportPath = this.getReportPath();
 
-    this.normalizeFlags();
+    await this.normalizeFlags();
 
     const testRunResult = await super.run();
 
     if (this.isToGenerateHtmlReport) {
       const html = parseToHtml(testRunResult as Report, this.flags['coverage']);
       this.saveToFile(reportPath, html);
+      console.log(`The report is generated: ${reportPath}`);
     }
 
     return testRunResult;
@@ -68,11 +73,13 @@ export default class TestDXApexTestRunCommand extends ApexTestRunCommand {
     return reportPath;
   }
 
-  private normalizeFlags() {
+  private async normalizeFlags() {
     const coverage = this.flags['codecoverage'];
     const resultformat = this.flags['resultformat'];
     const isResultFormatHtml = resultformat && resultformat === 'html';
     this.isToGenerateHtmlReport = !!this.flags['html'] || isResultFormatHtml;
+    const testsToRun = this.flags['tests'];
+    const testsToExclude = this.flags['exclude'];
 
     // fill in defaults for ApexTestRunCommand to run properly
     if (!coverage) {
@@ -81,14 +88,37 @@ export default class TestDXApexTestRunCommand extends ApexTestRunCommand {
     if (!resultformat || isResultFormatHtml) {
       this.flags['resultformat'] = 'json';
     }
+    this.flags['tests'] = await this.formClassListToRun(testsToRun, testsToExclude);
   }
 
-  private saveToFile(filePath, html) {
-    fs.writeFile(filePath, html, err => {
-      if (err) {
-          return console.error(err);
-      }
-      console.log(`The report is generated: ${filePath}`);
-    });
+  private saveToFile(filePath: string, html: string) {
+    return fs.writeFileSync(filePath, html);
+  }
+
+  private async formClassListToRun(toInclude, toExclude: string[]) {
+    let wholeList = clone(toInclude);
+    if (!wholeList) {
+      wholeList = await this.getTestClassList();
+    }
+    if (toExclude) {
+      wholeList = filter((className) => !includes(className, toExclude), wholeList);
+    }
+    return wholeList;
+  }
+
+  private async getTestClassList() {
+    const apexCode = `
+    ApexClass[] unitTests = [FIND '@isTest' IN ALL FIELDS RETURNING ApexClass(Id, Name)][0];
+
+    throw new StringException(JSON.serialize(unitTests));
+    `;
+    const leaveWhatMatters = replace('System.StringException: ', '');
+
+    const apexResult = await runApexCode(apexCode, this.flags['targetusername']);
+
+    const resultStr = leaveWhatMatters(apexResult.exceptionMessage);
+    const result = JSON.parse(resultStr);
+    const classList = map((cl) => cl.Name, result);
+    return classList;
   }
 }
