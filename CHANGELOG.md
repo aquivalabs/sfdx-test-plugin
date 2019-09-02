@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.0] - 2019-09-02
+
+### Added
+
+- New flag `--html` to generate html in addition to default output format behaviour
+- New `--resultfomrat` option - `html` to generate only html report
+
 ## [Version] - 0.1.2
 
 ### Added
