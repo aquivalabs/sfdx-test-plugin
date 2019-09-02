@@ -1,7 +1,7 @@
 {
   "name": "testdx",
   "description": "Generates beautiful reports from SF test runs",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "author": "Nikita Chursin @nchursin",
   "bugs": "https://github.com/nchursin/sfdx-test-runner/issues",
   "dependencies": {

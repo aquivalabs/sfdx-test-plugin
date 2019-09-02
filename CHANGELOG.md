@@ -1,5 +1,12 @@
 # Changelog
 
+
+## [0.3.1] - 2019-09-02
+
+### Fixed
+
+- README updated
+
 ## [0.3.0] - 2019-09-02
 
 ### Added
