@@ -40,7 +40,7 @@ OPTIONS
   -n, --classnames=classnames                                                       comma-separated list of Apex test
                                                                                     class names to run
 
-  -r, --resultformat=(human|tap|junit|json)                                         result format emitted to stdout;
+  -r, --resultformat=(human|tap|junit|json|html)                                    result format emitted to stdout;
                                                                                     --json flag overrides this parameter
 
   -s, --suitenames=suitenames                                                       comma-separated list of Apex test
@@ -49,6 +49,9 @@ OPTIONS
   -t, --tests=tests                                                                 comma-separated list of Apex test
                                                                                     class names or IDs and, if
                                                                                     applicable, test methods to run
+
+  -x, --exclude=tests                                                               comma-separated list of Apex test
+                                                                                    class names to exclude from the run
 
   -u, --targetusername=targetusername                                               username or alias for the target
                                                                                     org; overrides default target org
@@ -63,6 +66,9 @@ OPTIONS
                                                                                     api requests made by this command
 
   --json                                                                            format output as json
+
+  --html                                                                            generate html report IN ADDITION to
+                                                                                    whatever specified as resultformat
 
   --loglevel=(trace|debug|info|warn|error|fatal|TRACE|DEBUG|INFO|WARN|ERROR|FATAL)  [default: warn] logging level for
                                                                                     this command invocation
