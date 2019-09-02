@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.3.0] - 2019-09-02
+
+### Added
+
+- New parameter for the `apex:run` command - `--exclude (-x)`. Specify test classes you want to exclude from the test run
 
 ## [0.2.1] - 2019-09-02
 
