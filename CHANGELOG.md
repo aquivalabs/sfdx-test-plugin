@@ -1,5 +1,12 @@
 # Changelog
 
+
+## [0.2.1] - 2019-09-02
+
+### Security
+
+- Fixed security issue from npm audit
+
 ## [0.2.0] - 2019-09-02
 
 ### Added
