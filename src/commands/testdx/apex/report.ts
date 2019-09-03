@@ -1,7 +1,6 @@
 import { flags, FlagsConfig } from '@salesforce/command';
 import * as path from 'path';
 import { ApexTestReportCommand } from 'salesforce-alm/dist/commands/force/apex/test/report';
-import { Report } from '../../../models/report';
 import { Result } from '../../../models/result';
 
 // Initialize Messages with the current plugin directory
