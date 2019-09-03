@@ -1,5 +1,15 @@
 # Changelog
 
+## [0.3.2] - 2019-09-03
+
+### Fixed
+
+- Only quering test classes when `-x` options is specified
+- Fixed custom apex error throwing. Now parding logs instead of throwing an error
+
+### Security
+
+- Bump eslint-utils from 1.4.0 to 1.4.2
 
 ## [0.3.1] - 2019-09-02
 
