@@ -90,7 +90,9 @@ export default class TestDXApexTestRunCommand extends ApexTestRunCommand {
     if (!resultformat || isResultFormatHtml) {
       this.flags['resultformat'] = 'json';
     }
-    this.flags['tests'] = await this.formClassListToRun(testsToRun, testsToExclude);
+    if (testsToExclude) {
+      this.flags['tests'] = await this.formClassListToRun(testsToRun, testsToExclude);
+    }
   }
 
   private saveToFile(filePath: string, html: string) {
