@@ -5,7 +5,7 @@ import { Report } from '../../../models/report';
 
 // Initialize Messages with the current plugin directory
 import fs = require('fs');
-import { __, clone, filter, includes, map, replace } from 'ramda';
+import { __, clone, compose, filter, head, includes, map, match, replace } from 'ramda';
 import { parseToHtml } from '../../../templates/templates';
 import { runApexCode } from '../../../utils/apex';
 
@@ -111,13 +111,18 @@ export default class TestDXApexTestRunCommand extends ApexTestRunCommand {
     const apexCode = `
     ApexClass[] unitTests = [FIND '@isTest' IN ALL FIELDS RETURNING ApexClass(Id, Name)][0];
 
-    throw new StringException(JSON.serialize(unitTests));
+    System.debug('!>>>>!' + unitTests + '!<<<<!');
     `;
-    const leaveWhatMatters = replace('System.StringException: ', '');
+    const leaveWhatMatters = compose(
+      replace('!<<<<!', ''),
+      replace('!>>>>!', ''),
+      head,
+      match(/!>>>>!.*!<<<<!/)
+    );
 
     const apexResult = await runApexCode(apexCode, this.flags['targetusername']);
 
-    const resultStr = leaveWhatMatters(apexResult.exceptionMessage);
+    const resultStr = leaveWhatMatters(apexResult.log);
     const result = JSON.parse(resultStr);
     const classList = map((cl) => cl.Name, result);
     return classList;
