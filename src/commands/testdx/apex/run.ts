@@ -18,7 +18,7 @@ const flagsConfig = ApexTestRunCommand.flagsConfig;
 flagsConfig.codecoverage = undefined;
 ApexTestRunCommand.resultFormatOptions.options.push('html');
 
-flagsConfig.coverage = flags.number({char: 'C', description: 'Code coverage threshold. The report will paint a class red in HTML report in case coverage is less then this value. Defaults to 75'});
+flagsConfig.coverage = flags.number({char: 'C', description: 'Code coverage threshold. The HTML report will paint a class red in case coverage is less then this value. Defaults to 75'});
 flagsConfig.html = flags.boolean({description: 'Generates HTML report. Doesn\'t override --resultformat and --json flags, but works in addition'});
 flagsConfig.exclude = flags.array({char: 'x', description: 'Specify tests to EXCLUDE from test run. This is useful for granular test runs and risk group management'});
 
@@ -36,7 +36,7 @@ export default class TestDXApexTestRunCommand extends ApexTestRunCommand {
     '$ sfdx testdx:apex:run -n MyClassTest,MyOtherClassTest',
     '$ sfdx testdx:apex:run -s MySuite,MyOtherSuite',
     '$ sfdx testdx:apex:run -t MyClassTest.testCoolFeature,MyClassTest.testAwesomeFeature,AnotherClassTest,namespace.TheirClassTest.testThis',
-    '$ sfdx testdx:apex:run -l RunLocalTests -u me@my.org'
+    '$ sfdx testdx:apex:run -l RunLocalTests -u me@my.org --html'
   ];
 
   public static args = [{name: 'file'}];
@@ -48,7 +48,7 @@ export default class TestDXApexTestRunCommand extends ApexTestRunCommand {
 
     const testRunResult = await super.run();
 
-    if (this.isToGenerateHtmlReport) {
+    if (testRunResult && this.isToGenerateHtmlReport) {
       this.generateHtmlReport(testRunResult as Report);
     }
 
@@ -76,7 +76,6 @@ export default class TestDXApexTestRunCommand extends ApexTestRunCommand {
   }
 
   private async normalizeFlags() {
-    const coverage = this.flags['codecoverage'];
     const resultformat = this.flags['resultformat'];
     const isResultFormatHtml = resultformat && resultformat === 'html';
     this.isToGenerateHtmlReport = !!this.flags['html'] || isResultFormatHtml;
@@ -84,9 +83,7 @@ export default class TestDXApexTestRunCommand extends ApexTestRunCommand {
     const testsToExclude = this.flags['exclude'];
 
     // fill in defaults for ApexTestRunCommand to run properly
-    if (!coverage) {
-      this.flags['codecoverage'] = true;
-    }
+    this.flags['codecoverage'] = true;
     if (!resultformat || isResultFormatHtml) {
       this.flags['resultformat'] = 'json';
     }
